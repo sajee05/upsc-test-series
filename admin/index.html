@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel - Open Prep: UPSC</title>
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+  <header>
+    <h1>Admin Panel</h1>
+  </header>
+  <main>
+    <section>
+      <h2>Add Test</h2>
+      <form id="add-test-form">
+        <input type="text" id="test-name" placeholder="Test Name" required>
+        <input type="text" id="test-subject" placeholder="Subject" required>
+        <label for="test-date">Test Date:</label>
+        <input type="date" id="test-date" required>
+        <label for="test-deadline">Test Deadline (optional):</label>
+        <input type="date" id="test-deadline" placeholder="Deadline (optional)">
+        <button type="submit">Add Test</button>
+      </form>
+    </section>
+    <section>
+      <h2>User Data</h2>
+      <p>Note: View full user data in MongoDB Atlas directly.</p>
+    </section>
+  </main>
+  <script src="admin.js"></script>
+</body>
+</html>

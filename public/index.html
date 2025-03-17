@@ -5,16 +5,81 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Open Prep: UPSC</title>
   <link rel="stylesheet" href="styles.css">
+  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 </head>
 <body>
   <header>
-    <h1>Open Prep: UPSC</h1>
-    <p><i>by the students, for the students, of the students</i></p>
+    <div class="header-container">
+      <div class="header-left">
+        <img src="assets/india-logo.png" alt="Open Prep: UPSC" class="logo">
+        <div>
+          <h1>Open Prep: UPSC</h1>
+          <p><i>by the students, for the students, of the students</i></p>
+        </div>
+      </div>
+      <div class="header-right">
+        <img src="assets/telegram.webp" alt="Telegram" class="telegram-icon" onclick="window.open('https://t.me/+ZzrwdApKPQhkYzA9', '_blank')">
+        <button id="dark-mode-toggle" aria-label="Toggle Dark Mode">🌙</button>
+      </div>
+    </div>
   </header>
+  <nav class="dynamic-island">
+    <div class="island-container">
+      <button onclick="showSection('schedule')" class="island-btn active">Schedule</button>
+      <button onclick="showSection('leaderboard')" class="island-btn">Leaderboard</button>
+      <button onclick="showSection('misc')" class="island-btn">Misc</button>
+    </div>
+  </nav>
   <main>
-    <h2>Test Schedule</h2>
-    <ul id="test-list"></ul>
+    <section id="schedule" class="section active">
+      <h2>Test Schedule</h2>
+      <ul id="test-list"></ul>
+    </section>
+    <section id="leaderboard" class="section">
+      <h2>Leaderboard</h2>
+      <select id="leaderboard-type">
+        <option value="overall">Overall</option>
+        <option value="weekly">Weekly</option>
+        <option value="monthly">Monthly</option>
+      </select>
+      <ul id="leaderboard-list"></ul>
+    </section>
+    <section id="misc" class="section">
+      <h2>Misc</h2>
+      <div class="misc-buttons">
+        <button onclick="showUserData('marks')">Marks</button>
+        <button onclick="showUserData('reflections')">Reflections</button>
+      </div>
+      <div id="user-data"></div>
+    </section>
   </main>
+  <div id="marks-modal" class="modal">
+    <div class="modal-content">
+      <h3>Submit Marks</h3>
+      <form id="marks-form">
+        <input type="number" id="marks-input" placeholder="Enter Marks (0-100)" min="0" max="100" required>
+        <textarea id="reflections-input" placeholder="Reflections (mistakes & learnings)" required></textarea>
+        <div class="modal-buttons">
+          <button type="submit">Submit</button>
+          <button type="button" onclick="closeModal()">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div id="signin-modal" class="modal">
+    <div class="modal-content">
+      <h3>Please Sign In</h3>
+      <button onclick="signInWithNetlify()">Sign In with Netlify</button>
+      <button onclick="closeSignInModal()">Cancel</button>
+    </div>
+  </div>
+  <div id="username-modal" class="modal">
+    <div class="modal-content">
+      <h3>Set Your Username</h3>
+      <input type="text" id="username-input" placeholder="Enter Username" required>
+      <button onclick="saveUsername()">Save</button>
+    </div>
+  </div>
   <script src="script.js"></script>
 </body>
 </html>

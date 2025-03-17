@@ -1,9 +1,27 @@
 upsc-test-series/
 ├── functions/           # Backend (Netlify Functions)
-│   └── getTests.js
-├── public/              # Frontend files
-│   ├── index.html
-│   ├── styles.css
-│   └── script.js
-├── netlify.toml         # Netlify configuration
-└── package.json         # Node.js dependencies
+│   ├── getTests.js     # Fetch test schedule
+│   ├── submitMarks.js  # Submit marks and reflections
+│   ├── getLeaderboard.js # Fetch leaderboard data
+│   ├── getUserData.js  # Fetch user marks/reflections
+│   └── auth.js         # Placeholder for authentication
+├── public/             # Frontend files (Main Portal)
+│   ├── index.html      # Main HTML
+│   ├── styles.css      # Main CSS
+│   ├── script.js       # Main JavaScript
+│   └── assets/         # Assets for main portal
+│       ├── india-logo.png  # Add a small India logo image here
+│       └── telegram.webp   # Add Telegram logo image here
+├── admin/              # Admin Panel (Local Use)
+│   ├── index.html      # Admin HTML
+│   ├── admin.css       # Admin CSS
+│   ├── admin.js        # Admin JavaScript
+│   └── assets/         # Assets for admin panel
+│       ├── india-logo.png  # Same as above
+│       └── telegram.webp   # Same as above
+├── netlify.toml        # Netlify configuration
+├── package.json        # Node.js dependencies
+├── README.md           # Project documentation
+├── futureupdates.md    # Guide for future updates
+├── .gitignore          # Ignore files for Git
+└── .env                # Environment variables (local only)
