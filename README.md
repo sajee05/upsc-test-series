@@ -8,7 +8,6 @@ A modern, minimal website for UPSC test series.
 2. **Add Assets**: Place `india-logo.png` and `telegram.webp` in `public/assets/` and `admin/assets/`.
 3. **Install Dependencies**: Open a terminal in `upsc-test-series/`, run `npm install`.
 4. **Set Environment Variable**: Create a `.env` file with: MONGODB_URI=mongodb+srv://he7cules:uYxzpFLlXo4hOIGu@cluster0.wxfqq.mongodb.netmailto:uYxzpFLlXo4hOIGu@cluster0.wxfqq.mongodb.net)/upsc_test?retryWrites=true&w=majority&appName=Cluster0
-
 5. **Deploy to Netlify**:
 - Push to GitHub (exclude `.env`).
 - Connect Netlify to your GitHub repo.

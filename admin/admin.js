@@ -1,27 +1,29 @@
 document.addEventListener('DOMContentLoaded', () => {
-  document.getElementById('add-test-form').addEventListener('submit', (e) => {
+  document.getElementById('add-test-form').addEventListener('submit', async (e) => {
     e.preventDefault();
+    
     const name = document.getElementById('test-name').value;
     const subject = document.getElementById('test-subject').value;
     const date = document.getElementById('test-date').value;
     const deadline = document.getElementById('test-deadline').value || date;
 
-    // For local testing, log to console. Replace with actual fetch when hosted.
-    console.log({ name, subject, date, deadline });
-    alert('Test logged to console. Deploy admin to Netlify for full functionality.');
+    const testData = { name, subject, date, deadline };
 
-    // Uncomment this when hosting admin panel on Netlify:
-    /*
-    fetch('/.netlify/functions/addTest', {
-      method: 'POST',
-      body: JSON.stringify({ name, subject, date, deadline }),
-    })
-      .then(response => response.json())
-      .then(() => {
-        alert('Test added successfully!');
-        e.target.reset();
-      })
-      .catch(error => console.error('Error adding test:', error));
-    */
+    try {
+      // Send data to local Flask server
+      const response = await fetch('http://127.0.0.1:5050/addTest', {  
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(testData),
+      });
+
+      if (!response.ok) throw new Error('Failed to save test locally');
+
+      alert('Test added successfully!');
+      e.target.reset();
+    } catch (error) {
+      console.error('Error:', error);
+      alert('Failed to update test locally.');
+    }
   });
 });

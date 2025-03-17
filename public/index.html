@@ -8,6 +8,7 @@
   <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 </head>
 <body>
+  <!-- Header -->
   <header>
     <div class="header-container">
       <div class="header-left">
@@ -23,6 +24,8 @@
       </div>
     </div>
   </header>
+
+  <!-- Navigation -->
   <nav class="dynamic-island">
     <div class="island-container">
       <button onclick="showSection('schedule')" class="island-btn active">Schedule</button>
@@ -30,11 +33,16 @@
       <button onclick="showSection('misc')" class="island-btn">Misc</button>
     </div>
   </nav>
+
+  <!-- Main Content -->
   <main>
+    <!-- Test Schedule -->
     <section id="schedule" class="section active">
       <h2>Test Schedule</h2>
       <ul id="test-list"></ul>
     </section>
+
+    <!-- Leaderboard -->
     <section id="leaderboard" class="section">
       <h2>Leaderboard</h2>
       <select id="leaderboard-type">
@@ -44,6 +52,8 @@
       </select>
       <ul id="leaderboard-list"></ul>
     </section>
+
+    <!-- Misc Section -->
     <section id="misc" class="section">
       <h2>Misc</h2>
       <div class="misc-buttons">
@@ -53,6 +63,8 @@
       <div id="user-data"></div>
     </section>
   </main>
+
+  <!-- Submit Marks Modal -->
   <div id="marks-modal" class="modal">
     <div class="modal-content">
       <h3>Submit Marks</h3>
@@ -66,6 +78,8 @@
       </form>
     </div>
   </div>
+
+  <!-- Sign-In Modal -->
   <div id="signin-modal" class="modal">
     <div class="modal-content">
       <h3>Please Sign In</h3>
@@ -73,6 +87,8 @@
       <button onclick="closeSignInModal()">Cancel</button>
     </div>
   </div>
+
+  <!-- Username Modal -->
   <div id="username-modal" class="modal">
     <div class="modal-content">
       <h3>Set Your Username</h3>
@@ -80,6 +96,7 @@
       <button onclick="saveUsername()">Save</button>
     </div>
   </div>
+
   <script src="script.js"></script>
 </body>
 </html>

@@ -12,25 +12,20 @@ document.addEventListener('DOMContentLoaded', () => {
     darkModeToggle.textContent = document.body.classList.contains('dark') ? '☀️' : '🌙';
   });
 
-  // Section switching logic
-  function showSection(sectionId) {
+  // Navigation
+  window.showSection = function(sectionId) {
     document.querySelectorAll('.section').forEach(section => {
-      section.classList.remove('active');
+      section.classList.toggle('active', section.id === sectionId);
     });
-    document.getElementById(sectionId).classList.add('active');
-
-    // Update active button styling
     document.querySelectorAll('.island-btn').forEach(btn => {
-      btn.classList.remove('active');
+      btn.classList.toggle('active', btn.onclick.toString().includes(sectionId));
     });
-    document.querySelector(`[onclick="showSection('${sectionId}')"]`).classList.add('active');
-  }
-  window.showSection = showSection; // Ensure function is accessible globally
+  };
 
-  // Fetch Tests
+  // Fetch tests
   fetchTests();
   function fetchTests() {
-    fetch('http://127.0.0.1:5050/getTests')
+    fetch('/.netlify/functions/getTests')
       .then(response => response.json())
       .then(data => {
         const testList = document.getElementById('test-list');
@@ -38,15 +33,11 @@ document.addEventListener('DOMContentLoaded', () => {
         data.forEach(test => {
           const li = document.createElement('li');
           const status = getTestStatus(test);
-
-          li.innerHTML = `<span class="status ${status.toLowerCase()}">${status}</span> ${test.name} - ${test.subject}`;
-          li.classList.add('test-entry');
-
+          li.innerHTML = `${test.name} - ${test.subject} (${test.date}) <span>${status}</span>`;
           if (status === 'Available') {
             li.style.cursor = 'pointer';
             li.onclick = () => openMarksModal(test);
           }
-
           testList.appendChild(li);
         });
       })
@@ -63,9 +54,9 @@ document.addEventListener('DOMContentLoaded', () => {
     return 'Available';
   }
 
-  // Marks Modal
+  // Marks modal
   let currentTest = null;
-  window.openMarksModal = function (test) {
+  window.openMarksModal = function(test) {
     if (!user) {
       document.getElementById('signin-modal').style.display = 'flex';
       return;
@@ -74,7 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('marks-modal').style.display = 'flex';
   };
 
-  window.closeModal = function () {
+  window.closeModal = function() {
     document.getElementById('marks-modal').style.display = 'none';
   };
 
@@ -82,9 +73,8 @@ document.addEventListener('DOMContentLoaded', () => {
     e.preventDefault();
     const marks = document.getElementById('marks-input').value;
     const reflections = document.getElementById('reflections-input').value;
-    fetch('http://127.0.0.1:5050/submitMarks', {
+    fetch('/.netlify/functions/submitMarks', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ testId: currentTest._id, userId: user.id, marks, reflections }),
     })
       .then(response => response.json())
@@ -100,11 +90,11 @@ document.addEventListener('DOMContentLoaded', () => {
   const leaderboardType = document.getElementById('leaderboard-type');
   leaderboardType.addEventListener('change', updateLeaderboard);
   updateLeaderboard();
-  setInterval(updateLeaderboard, 30000);
+  setInterval(updateLeaderboard, 30000); // Auto-update every 30 seconds
 
   function updateLeaderboard() {
     const type = leaderboardType.value;
-    fetch(`http://127.0.0.1:5050/getLeaderboard?type=${type}`)
+    fetch(`/.netlify/functions/getLeaderboard?type=${type}`)
       .then(response => response.json())
       .then(data => {
         const leaderboardList = document.getElementById('leaderboard-list');
@@ -119,10 +109,10 @@ document.addEventListener('DOMContentLoaded', () => {
       .catch(error => console.error('Error fetching leaderboard:', error));
   }
 
-  // Fetch User Data
-  window.showUserData = function (type) {
+  // User data
+  window.showUserData = function(type) {
     if (!user) return;
-    fetch(`http://127.0.0.1:5050/getUserData?type=${type}&userId=${user.id}`)
+    fetch(`/.netlify/functions/getUserData?type=${type}&userId=${user.id}`)
       .then(response => response.json())
       .then(data => {
         const userDataDiv = document.getElementById('user-data');
@@ -133,20 +123,59 @@ document.addEventListener('DOMContentLoaded', () => {
           });
         } else if (type === 'reflections') {
           data.forEach(reflection => {
-            userDataDiv.innerHTML += `<p>${reflection.testName}: ${reflection.text}</p>`;
+            userDataDiv.innerHTML += `<p>${reflection.testName}: ${reflection.reflections}</p>`;
           });
         }
       })
       .catch(error => console.error('Error fetching user data:', error));
   };
 
-  // Mobile UI Fixes
-  function fixMobileUI() {
-    document.querySelectorAll('.button').forEach(btn => {
-      btn.style.display = 'block';
-      btn.style.margin = '5px auto';
-      btn.style.width = '80%';
-    });
-  }
-  fixMobileUI();
+  // Netlify Identity Authentication
+  netlifyIdentity.on('init', (u) => {
+    user = u;
+    if (user && !user.user_metadata?.username) {
+      document.getElementById('username-modal').style.display = 'flex';
+    }
+  });
+
+  netlifyIdentity.on('login', (u) => {
+    user = u;
+    localStorage.setItem('user', JSON.stringify(user));
+    if (!user.user_metadata?.username) {
+      document.getElementById('username-modal').style.display = 'flex';
+    }
+  });
+
+  netlifyIdentity.on('logout', () => {
+    user = null;
+    localStorage.removeItem('user');
+  });
+
+  window.signInWithNetlify = function() {
+    netlifyIdentity.open('login');
+    document.getElementById('signin-modal').style.display = 'none';
+  };
+
+  window.closeSignInModal = function() {
+    document.getElementById('signin-modal').style.display = 'none';
+  };
+
+  window.saveUsername = function() {
+    const username = document.getElementById('username-input').value;
+    fetch('/.netlify/functions/auth', {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${user.token.access_token}` },
+      body: JSON.stringify({ username }),
+    })
+      .then(() => {
+        user.user_metadata = { username };
+        localStorage.setItem('user', JSON.stringify(user));
+        document.getElementById('username-modal').style.display = 'none';
+      })
+      .catch(error => console.error('Error saving username:', error));
+  };
+
+  // Check saved user
+  const savedUser = localStorage.getItem('user');
+  if (savedUser) user = JSON.parse(savedUser);
 });
