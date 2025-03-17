@@ -1,0 +1,9 @@
+upsc-test-series/
+├── functions/           # Backend (Netlify Functions)
+│   └── getTests.js
+├── public/              # Frontend files
+│   ├── index.html
+│   ├── styles.css
+│   └── script.js
+├── netlify.toml         # Netlify configuration
+└── package.json         # Node.js dependencies

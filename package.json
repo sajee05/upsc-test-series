@@ -1,0 +1,8 @@
+{
+    "name": "upsc-test-series",
+    "version": "1.0.0",
+    "description": "UPSC Test Series",
+    "dependencies": {
+      "mongodb": "^4.0.0"
+    }
+  }
