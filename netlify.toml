@@ -1,8 +1,13 @@
 [build]
   functions = "functions"
+  publish = "public"  # Ensure Netlify serves from the correct directory
 
 [[redirects]]
-from = "/admin/*"
-to = "/admin/:splat"
-status = 200
-force = true
+  from = "/admin"
+  to = "/admin/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/admin/*"
+  to = "/admin/index.html"
+  status = 200
